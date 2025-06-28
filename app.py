@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import os
@@ -7,6 +6,48 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="GrowPilot.ai", layout="wide")
+
+# Inject modern CSS
+st.markdown("""
+<style>
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+:root {
+    --background-color: #f9f9fb;
+    --text-color: #1f2937;
+    --card-bg: #ffffff;
+    --accent-color: #10b981;
+    --border-radius: 12px;
+}
+[data-theme="dark"] {
+    --background-color: #111827;
+    --text-color: #f9fafb;
+    --card-bg: #1f2937;
+    --accent-color: #34d399;
+}
+.card {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    margin-bottom: 1rem;
+}
+button, .stButton > button {
+    border-radius: var(--border-radius);
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+}
+button:hover {
+    opacity: 0.9;
+    transition: 0.3s;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # --- Initialize Data Storage ---
 if "data" not in st.session_state:
@@ -113,44 +154,3 @@ elif page == "Export Data":
             file_name=f"{section}.csv",
             mime="text/csv"
         )
-
-
-
-<style>
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-}
-:root {
-    --background-color: #f9f9fb;
-    --text-color: #1f2937;
-    --card-bg: #ffffff;
-    --accent-color: #10b981;
-    --border-radius: 12px;
-}
-[data-theme="dark"] {
-    --background-color: #111827;
-    --text-color: #f9fafb;
-    --card-bg: #1f2937;
-    --accent-color: #34d399;
-}
-.card {
-    background-color: var(--card-bg);
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    margin-bottom: 1rem;
-}
-button, .stButton > button {
-    border-radius: var(--border-radius);
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-}
-button:hover {
-    opacity: 0.9;
-    transition: 0.3s;
-}
-</style>
