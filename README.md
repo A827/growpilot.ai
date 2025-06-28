@@ -1,3 +1,3 @@
-# GrowPilot.ai
+# GrowPilot.ai v2 – Designer Edition
 
-GrowPilot.ai is an AI-powered plant tracking app that logs planting, watering, weather, nutrient input, and predicts future harvests.
+A beautiful, modern version of the AI-powered plant tracker built in Streamlit.
