@@ -1,3 +1,3 @@
-# GrowPilot.ai v2 – Designer Edition
+# GrowPilot.ai v3 – Barcode Edition
 
-A beautiful, modern version of the AI-powered plant tracker built in Streamlit.
+Includes barcode scanning for nutrient logging.
