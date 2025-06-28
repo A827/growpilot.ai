@@ -117,26 +117,50 @@ elif page == "Log Watering":
         save_entry("watering", {"Plant": plant, "Date": date, "Liters": amount})
         st.success("Watering saved.")
 
-# --- Log Nutrients ---
+# --- Log Nutrients with Webcam Support ---
 elif page == "Log Nutrients":
+    from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
+    import av
+    import cv2
+    import numpy as np
+
     st.title("🧪 Nutrient Entry")
     plant = st.selectbox("Select Plant", [p["Name"] for p in st.session_state.data["plants"]])
     date = st.date_input("Date", datetime.today())
 
-    st.subheader("📷 Upload Barcode Image (Optional)")
-    barcode_img = st.file_uploader("Upload image of nutrient product barcode", type=["png", "jpg", "jpeg"])
-    product_name = ""
+    method = st.radio("How would you like to input the nutrient label?", ["Upload Image", "Use Webcam"])
 
-    if barcode_img:
-        st.image(barcode_img, caption="Uploaded Barcode", use_column_width=True)
-        st.warning("⚠️ Automatic barcode reading is not supported in this cloud version. Please enter the product name manually.")
+    captured_image = None
 
-    product_name = st.text_input("Product Used")
-    notes = st.text_area("Notes")
+    if method == "Upload Image":
+        image = st.file_uploader("Upload Image of Nutrient Product", type=["jpg", "jpeg", "png"])
+        if image:
+            st.image(image, caption="Uploaded Image", use_column_width=True)
+            st.warning("Please enter the product name manually below.")
+    else:
+        st.info("📷 Allow webcam access below to capture label")
+        class CameraCapture(VideoTransformerBase):
+            def __init__(self):
+                self.frame = None
+            def transform(self, frame):
+                img = frame.to_ndarray(format="bgr24")
+                self.frame = img
+                return img
+
+        ctx = webrtc_streamer(key="label-cam", video_transformer_factory=CameraCapture)
+
+        if ctx.video_transformer and ctx.video_transformer.frame is not None:
+            captured_image = ctx.video_transformer.frame
+            st.image(captured_image, caption="Captured Frame", use_column_width=True)
+            st.warning("Please enter the product name manually below.")
+
+    product = st.text_input("Product Name")
+    notes = st.text_area("Notes (Optional)")
 
     if st.button("Save Nutrient Log"):
-        save_entry("nutrients", {"Plant": plant, "Date": date, "Product": product_name, "Notes": notes})
-        st.success("Nutrient recorded.")
+        save_entry("nutrients", {"Plant": plant, "Date": date, "Product": product, "Notes": notes})
+        st.success("✅ Nutrient log saved.")
+        
         
 # --- Log Harvest ---
 elif page == "Log Harvest":
