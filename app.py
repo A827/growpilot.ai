@@ -122,12 +122,22 @@ elif page == "Log Nutrients":
     st.title("🧪 Nutrient Entry")
     plant = st.selectbox("Select Plant", [p["Name"] for p in st.session_state.data["plants"]])
     date = st.date_input("Date", datetime.today())
-    product = st.text_input("Product Used")
-    notes = st.text_area("Notes")
-    if st.button("Save Nutrient Log"):
-        save_entry("nutrients", {"Plant": plant, "Date": date, "Product": product, "Notes": notes})
-        st.success("Nutrient recorded.")
 
+    st.subheader("📷 Upload Barcode Image (Optional)")
+    barcode_img = st.file_uploader("Upload image of nutrient product barcode", type=["png", "jpg", "jpeg"])
+    product_name = ""
+
+    if barcode_img:
+        st.image(barcode_img, caption="Uploaded Barcode", use_column_width=True)
+        st.warning("⚠️ Automatic barcode reading is not supported in this cloud version. Please enter the product name manually.")
+
+    product_name = st.text_input("Product Used")
+    notes = st.text_area("Notes")
+
+    if st.button("Save Nutrient Log"):
+        save_entry("nutrients", {"Plant": plant, "Date": date, "Product": product_name, "Notes": notes})
+        st.success("Nutrient recorded.")
+        
 # --- Log Harvest ---
 elif page == "Log Harvest":
     st.title("🍅 Harvest Log")
